@@ -1,0 +1,38 @@
+version: 1.0
+
+description: A basic workflow that runs an arbitrary linux command.
+
+input:
+  - notify_script
+  - remediate_script
+  - cwd
+
+tasks:
+  task1:
+    action: core.local cmd=<% ctx(cwd) %>
+    next:
+      - when: <% succeeded() %>
+        publish:
+          - stdout: <% result().stdout %>
+          - stderr: <% result().stderr %>
+
+        do: task2
+
+  task2:
+    action: core.local cmd=<% ctx(notify_script) %>
+    next:
+      - when: <% succeeded() %>
+        publish:
+          - stdout: <% result().stdout %>
+          - stderr: <% result().stderr %>
+        do: task3
+  task3:
+    action: core.local cmd=<% ctx(remediate_script) %>
+    next:
+      - when: <% succeeded() %>
+        publish:
+          - stdout: <% result().stdout %>
+          - stderr: <% result().stderr %>
+
+output:
+  - stdout: <% ctx(stdout) %>

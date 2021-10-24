@@ -1,0 +1,19 @@
+---
+name: ospf-remediations-seq
+pack: examples
+description: ospf-workflow
+runner_type: orquesta
+entry_point: workflows/ospfremediations.yaml
+enabled: true
+parameters:
+  notify_script:
+    required: true
+    type: string
+
+  remediate_script:
+    required: true
+    type: string
+
+  cwd:
+    required: true
+    type: string
